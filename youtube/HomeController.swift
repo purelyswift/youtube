@@ -9,6 +9,26 @@
 import UIKit
 
 class HomeController: UICollectionViewController, UICollectionViewDelegateFlowLayout {
+    
+    var videos: [Video] = {
+        var kanyeChannel = Channel()
+        kanyeChannel.name = "KanyeIsTheBestChannel"
+        kanyeChannel.profileImageName = "kanye_profile"
+        
+        var blankSpaceVideo = Video()
+        blankSpaceVideo.title = "Taylor Swift - Blank Space"
+        blankSpaceVideo.thumbnailImageName = "taylor_swift_blank_space"
+        blankSpaceVideo.channel = kanyeChannel
+        blankSpaceVideo.numberOfViews = 23932843093
+        
+        var badBloodVideo = Video()
+        badBloodVideo.title = "Taylor Swift - Bad Blood featuring Kendrick Lamar"
+        badBloodVideo.thumbnailImageName = "taylor_swift_bad_blood"
+        badBloodVideo.channel = kanyeChannel
+        badBloodVideo.numberOfViews = 57989654934
+        
+        return [blankSpaceVideo, badBloodVideo]
+    }()
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -30,6 +50,24 @@ class HomeController: UICollectionViewController, UICollectionViewDelegateFlowLa
         collectionView?.scrollIndicatorInsets = UIEdgeInsetsMake(50, 0, 0, 0)
         
         setupMenuBar()
+        setupNavBarButtons()
+    }
+    
+    func setupNavBarButtons() {
+        let searchImage = UIImage(named: "search_icon")?.imageWithRenderingMode(.AlwaysOriginal)
+        let searchBarButtonItem = UIBarButtonItem(image: searchImage, style: .Plain, target: self, action: #selector(handleSearch))
+        
+        let moreButton = UIBarButtonItem(image: UIImage(named: "nav_more_icon")?.imageWithRenderingMode(.AlwaysOriginal), style: .Plain, target: self, action: #selector(handleMore))
+        
+        navigationItem.rightBarButtonItems = [moreButton, searchBarButtonItem]
+    }
+    
+    func handleMore() {
+        
+    }
+    
+    func handleSearch() {
+        print(123)
     }
     
     let menuBar: MenuBar = {
@@ -44,18 +82,20 @@ class HomeController: UICollectionViewController, UICollectionViewDelegateFlowLa
     }
     
     override func collectionView(collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return 5
+        return videos.count
     }
     
     override func collectionView(collectionView: UICollectionView, cellForItemAtIndexPath indexPath: NSIndexPath) -> UICollectionViewCell {
-        let cell = collectionView.dequeueReusableCellWithReuseIdentifier("cellId", forIndexPath: indexPath)
+        let cell = collectionView.dequeueReusableCellWithReuseIdentifier("cellId", forIndexPath: indexPath) as! VideoCell
+        
+        cell.video = videos[indexPath.item]
         
         return cell
     }
     
     func collectionView(collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAtIndexPath indexPath: NSIndexPath) -> CGSize {
         let height = (view.frame.width - 16 - 16) * 9 / 16
-        return CGSizeMake(view.frame.width, height + 16 + 68)
+        return CGSizeMake(view.frame.width, height + 16 + 88)
     }
     
     func collectionView(collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumLineSpacingForSectionAtIndex section: Int) -> CGFloat {
