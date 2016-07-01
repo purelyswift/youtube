@@ -33,6 +33,41 @@ class MenuBar: UIView, UICollectionViewDataSource, UICollectionViewDelegate, UIC
         
         let selectedIndexPath = NSIndexPath(forItem: 0, inSection: 0)
         collectionView.selectItemAtIndexPath(selectedIndexPath, animated: false, scrollPosition: .None)
+        
+        setupHorizontalBar()
+    }
+    
+    var horizontalBarLeftAnchorConstraint: NSLayoutConstraint?
+    
+    func setupHorizontalBar() {
+        let horizontalBarView = UIView()
+        horizontalBarView.backgroundColor = UIColor(white: 0.95, alpha: 1)
+        horizontalBarView.translatesAutoresizingMaskIntoConstraints = false
+        addSubview(horizontalBarView)
+        
+        //old school frame way of doing things
+//        horizontalBarView.frame = CGRectMake(<#T##x: CGFloat##CGFloat#>, <#T##y: CGFloat##CGFloat#>, <#T##width: CGFloat##CGFloat#>, <#T##height: CGFloat##CGFloat#>)
+        
+        //new school way of laying out our views
+        //in ios9
+        //need x, y, width, height constraints
+        
+        horizontalBarLeftAnchorConstraint = horizontalBarView.leftAnchor.constraintEqualToAnchor(self.leftAnchor)
+        horizontalBarLeftAnchorConstraint?.active = true
+        
+        horizontalBarView.bottomAnchor.constraintEqualToAnchor(self.bottomAnchor).active = true
+        horizontalBarView.widthAnchor.constraintEqualToAnchor(self.widthAnchor, multiplier: 1/4).active = true
+        horizontalBarView.heightAnchor.constraintEqualToConstant(4).active = true
+    }
+    
+    func collectionView(collectionView: UICollectionView, didSelectItemAtIndexPath indexPath: NSIndexPath) {
+        print(indexPath.item)
+        let x = CGFloat(indexPath.item) * frame.width / 4
+        horizontalBarLeftAnchorConstraint?.constant = x
+        
+        UIView.animateWithDuration(0.75, delay: 0, usingSpringWithDamping: 1, initialSpringVelocity: 1, options: .CurveEaseOut, animations: { 
+            self.layoutIfNeeded()
+            }, completion: nil)
     }
     
     func collectionView(collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
