@@ -33,7 +33,7 @@ class VideoCell: BaseCell {
             
             setupProfileImage()
             
-            if let channelName = video?.channel?.name, numberOfViews = video?.numberOfViews {
+            if let channelName = video?.channel?.name, numberOfViews = video?.number_of_views {
                 
                 let numberFormatter = NSNumberFormatter()
                 numberFormatter.numberStyle = .DecimalStyle
@@ -60,13 +60,13 @@ class VideoCell: BaseCell {
     }
     
     func setupProfileImage() {
-        if let profileImageUrl = video?.channel?.profileImageName {
+        if let profileImageUrl = video?.channel?.profile_image_name {
             userProfileImageView.loadImageUsingUrlString(profileImageUrl)
         }
     }
     
     func setupThumbnailImage() {
-        if let thumbnailImageUrl = video?.thumbnailImageName {
+        if let thumbnailImageUrl = video?.thumbnail_image_name {
             thumbnailImageView.loadImageUsingUrlString(thumbnailImageUrl)
         }
     }
